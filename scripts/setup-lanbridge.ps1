@@ -18,7 +18,7 @@ function Write-Step {
 function Ensure-Conda {
   $conda = Get-Command conda -ErrorAction SilentlyContinue
   if (-not $conda) {
-    throw "未找到 conda。请先安装 Miniconda/Anaconda，并确认 conda 在 PATH 中。"
+    throw "Conda was not found. Install Miniconda or Anaconda first, then make sure conda is in PATH."
   }
 }
 
@@ -33,48 +33,53 @@ function Ensure-CondaEnv {
     [string]$Version
   )
 
-  $envs = conda env list | Out-String
-  if ($envs -match "(?m)^\s*$([regex]::Escape($Name))\s") {
-    Write-Host "conda 环境 $Name 已存在，跳过创建。"
+  $envListJson = conda env list --json | Out-String
+  $envList = $envListJson | ConvertFrom-Json
+  $existingEnv = @($envList.envs) | Where-Object {
+    [System.IO.Path]::GetFileName($_) -eq $Name
+  }
+
+  if ($existingEnv.Count -gt 0) {
+    Write-Host "Conda environment '$Name' already exists. Skipping creation."
     return
   }
 
-  Write-Step "创建 conda 环境 $Name，并安装 nodejs=$Version"
+  Write-Step "Creating conda environment '$Name' with nodejs=$Version"
   conda create -n $Name -y -c conda-forge "nodejs=$Version"
 }
 
-Write-Step "检查 conda"
+Write-Step "Checking conda"
 Ensure-Conda
 Initialize-CondaShell
 Ensure-CondaEnv -Name $EnvName -Version $NodeVersion
 
-Write-Step "激活 conda 环境 $EnvName"
+Write-Step "Activating conda environment '$EnvName'"
 conda activate $EnvName
 
-Write-Step "配置 Electron 镜像与缓存"
+Write-Step "Configuring Electron mirror and caches"
 New-Item -ItemType Directory -Force -Path $electronCache | Out-Null
 New-Item -ItemType Directory -Force -Path $npmCache | Out-Null
 $env:ELECTRON_MIRROR = $ElectronMirror
 $env:ELECTRON_CACHE = $electronCache
 $env:npm_config_cache = $npmCache
 
-Write-Step "安装 npm 依赖"
+Write-Step "Installing npm dependencies"
 Push-Location $repoRoot
 try {
   npm install --no-audit --no-fund
 
-  Write-Step "验证 Electron 二进制"
+  Write-Step "Validating Electron binary"
   npx electron --version
 
-  Write-Step "验证项目构建"
+  Write-Step "Validating project build"
   npm run build
 }
 finally {
   Pop-Location
 }
 
-Write-Host "`n初始化完成。" -ForegroundColor Green
-Write-Host "后续使用：" -ForegroundColor Green
+Write-Host "`nSetup complete." -ForegroundColor Green
+Write-Host "Next steps:" -ForegroundColor Green
 Write-Host "1. conda activate $EnvName"
 Write-Host "2. cd `"$repoRoot`""
 Write-Host "3. npm run dev"
