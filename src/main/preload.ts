@@ -7,6 +7,8 @@ const bridge = {
   chooseReceiveDirectory: (): Promise<string> => ipcRenderer.invoke("app:choose-directory"),
   chooseFiles: (): Promise<string[]> => ipcRenderer.invoke("app:choose-files"),
   openReceiveDirectory: (): Promise<void> => ipcRenderer.invoke("app:open-directory"),
+  revealPath: (targetPath: string): Promise<void> => ipcRenderer.invoke("app:reveal-path", { targetPath }),
+  copyText: (text: string): Promise<void> => ipcRenderer.invoke("app:copy-text", { text }),
   requestPairing: (deviceId: string, enteredCode: string): Promise<void> =>
     ipcRenderer.invoke("app:request-pairing", { deviceId, enteredCode }),
   respondToPairRequest: (requestId: string, accepted: boolean): Promise<void> =>

@@ -4,6 +4,8 @@ import {
   Airplay,
   ArrowUpFromLine,
   CheckCheck,
+  Check,
+  Copy,
   FolderOpen,
   MonitorSmartphone,
   RefreshCw,
@@ -38,6 +40,7 @@ export default function App() {
   const [pairingCodeInput, setPairingCodeInput] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -109,6 +112,18 @@ export default function App() {
     setSelectedTargets((current) =>
       current.includes(deviceId) ? current.filter((id) => id !== deviceId) : [...current, deviceId]
     );
+  }
+
+  async function handleCopyMessage(messageId: string, text: string) {
+    try {
+      await window.bridge.copyText(text);
+      setCopiedMessageId(messageId);
+      window.setTimeout(() => {
+        setCopiedMessageId((current) => (current === messageId ? null : current));
+      }, 1600);
+    } catch (nextError) {
+      setError(getErrorMessage(nextError));
+    }
   }
 
   return (
@@ -256,9 +271,20 @@ export default function App() {
               <div className="timeline-scroll">
                 {state.messages.map((message) => (
                   <div className="timeline-item" key={message.messageId}>
-                    <div className="timeline-topline">
+                    <div className="timeline-topline timeline-topline-actions">
                       <span>{message.direction === "incoming" ? `来自 ${message.senderDeviceName}` : "你发送的文字"}</span>
-                      <time>{formatTime(message.timestamp)}</time>
+                      <div className="timeline-actions">
+                        <time>{formatTime(message.timestamp)}</time>
+                        <button
+                          className="timeline-icon-button"
+                          type="button"
+                          aria-label="复制整段文本"
+                          title={copiedMessageId === message.messageId ? "已复制" : "复制整段文本"}
+                          onClick={() => void handleCopyMessage(message.messageId, message.text)}
+                        >
+                          {copiedMessageId === message.messageId ? <Check size={14} /> : <Copy size={14} />}
+                        </button>
+                      </div>
                     </div>
                     <p>{message.text}</p>
                   </div>
@@ -271,7 +297,24 @@ export default function App() {
               <h3>文件</h3>
               <div className="timeline-scroll">
                 {state.transfers.map((transfer) => (
-                  <div className="timeline-item" key={transfer.transferId}>
+                  <div
+                    className={`timeline-item ${transfer.savedPath ? "timeline-item-clickable" : ""}`}
+                    key={transfer.transferId}
+                    role={transfer.savedPath ? "button" : undefined}
+                    tabIndex={transfer.savedPath ? 0 : undefined}
+                    onClick={() => {
+                      if (transfer.savedPath) {
+                        void window.bridge.revealPath(transfer.savedPath);
+                      }
+                    }}
+                    onKeyDown={(event) => {
+                      if (transfer.savedPath && (event.key === "Enter" || event.key === " ")) {
+                        event.preventDefault();
+                        void window.bridge.revealPath(transfer.savedPath);
+                      }
+                    }}
+                    title={transfer.savedPath ? "点击打开文件所在位置" : undefined}
+                  >
                     <div className="timeline-topline">
                       <span>{transfer.fileName}</span>
                       <time>{formatTime(transfer.updatedAt)}</time>
@@ -284,7 +327,10 @@ export default function App() {
                     </div>
                     <div className="timeline-bottom">
                       <span>{renderTransferLabel(transfer.status)}</span>
-                      <span>{Math.round(transfer.progress * 100)}%</span>
+                      <span>
+                        {Math.round(transfer.progress * 100)}%
+                        {transfer.savedPath ? " · 点击打开位置" : ""}
+                      </span>
                     </div>
                     {transfer.savedPath ? <code>{transfer.savedPath}</code> : null}
                     {transfer.error ? <span className="error-text">{transfer.error}</span> : null}

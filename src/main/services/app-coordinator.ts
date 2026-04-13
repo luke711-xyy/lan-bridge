@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { EventEmitter } from "node:events";
 
 import { dialog, shell } from "electron";
@@ -183,6 +185,27 @@ export class AppCoordinator extends EventEmitter {
       return;
     }
     await shell.openPath(this.state.receiveDirectory);
+  }
+
+  async revealPath(targetPath: string): Promise<void> {
+    if (!targetPath) {
+      return;
+    }
+
+    const normalizedPath = path.normalize(targetPath);
+    const parentDirectory = path.dirname(normalizedPath);
+
+    if (fs.existsSync(normalizedPath)) {
+      shell.showItemInFolder(normalizedPath);
+      return;
+    }
+
+    if (fs.existsSync(parentDirectory)) {
+      await shell.openPath(parentDirectory);
+      return;
+    }
+
+    throw new Error("文件位置不存在，可能已被移动或删除。");
   }
 
   async requestPairing(deviceId: string, enteredCode: string): Promise<void> {

@@ -42,14 +42,14 @@ button {
 .app-shell {
   position: relative;
   min-height: 100vh;
-  padding: 28px;
+  padding: 12px;
   overflow: hidden;
 }
 
 .ambient {
   position: absolute;
-  width: 380px;
-  height: 380px;
+  width: 300px;
+  height: 300px;
   border-radius: 999px;
   filter: blur(16px);
   opacity: 0.5;
@@ -57,14 +57,14 @@ button {
 }
 
 .ambient-left {
-  left: -120px;
-  top: -80px;
+  left: -108px;
+  top: -72px;
   background: rgba(255, 255, 255, 0.9);
 }
 
 .ambient-right {
-  right: -120px;
-  bottom: -120px;
+  right: -108px;
+  bottom: -108px;
   background: rgba(225, 203, 176, 0.8);
 }
 
@@ -79,21 +79,21 @@ button {
 .surface {
   position: relative;
   z-index: 1;
-  border-radius: 30px;
+  border-radius: 22px;
 }
 
 .hero-card {
   display: flex;
   justify-content: space-between;
-  gap: 32px;
-  padding: 28px 30px;
-  margin-bottom: 24px;
+  gap: 16px;
+  padding: 18px;
+  margin-bottom: 14px;
 }
 
 .eyebrow,
 .section-kicker {
   margin: 0 0 8px;
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -107,13 +107,14 @@ button {
 }
 
 .hero-card h1 {
-  font-size: clamp(32px, 3vw, 46px);
+  font-size: clamp(22px, 2.1vw, 30px);
 }
 
 .hero-copy {
-  margin: 14px 0 0;
-  max-width: 680px;
+  margin: 8px 0 0;
+  max-width: 100%;
   color: var(--text-muted);
+  font-size: 13px;
 }
 
 .hero-copy span {
@@ -125,18 +126,19 @@ button {
 .hero-meta {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  min-width: 220px;
+  gap: 6px;
+  min-width: 0;
 }
 
 .meta-chip {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  border-radius: 18px;
+  gap: 8px;
+  padding: 9px 11px;
+  border-radius: 14px;
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(77, 57, 34, 0.08);
+  font-size: 12px;
 }
 
 .meta-chip.subtle {
@@ -148,17 +150,17 @@ button {
   z-index: 1;
   display: grid;
   grid-template-columns: 1.28fr 0.92fr;
-  gap: 24px;
+  gap: 14px;
 }
 
 .surface {
-  padding: 24px;
+  padding: 14px;
 }
 
 .upload-panel {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 12px;
 }
 
 .timeline-panel {
@@ -168,12 +170,12 @@ button {
 .section-head {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  gap: 10px;
   align-items: center;
 }
 
 .section-head.compact {
-  margin-bottom: 18px;
+  margin-bottom: 10px;
 }
 
 .icon-button,
@@ -183,10 +185,11 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  border-radius: 16px;
-  padding: 12px 16px;
+  gap: 7px;
+  border-radius: 13px;
+  padding: 9px 12px;
   transition: transform 160ms ease, background-color 160ms ease, opacity 160ms ease;
+  font-size: 12px;
 }
 
 .icon-button,
@@ -203,16 +206,16 @@ button {
 }
 
 .chip-count {
-  padding: 10px 14px;
+  padding: 7px 10px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.78);
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .drop-board {
-  min-height: 290px;
-  border-radius: 26px;
+  min-height: 192px;
+  border-radius: 20px;
   border: 2px dashed rgba(31, 122, 103, 0.28);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.38)),
@@ -227,9 +230,9 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 8px;
   text-align: center;
-  padding: 28px;
+  padding: 16px;
   transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
 }
 
@@ -244,14 +247,15 @@ button {
 }
 
 .drop-board strong {
-  font-size: 22px;
+  font-size: 16px;
   letter-spacing: -0.03em;
 }
 
 .drop-board p {
-  max-width: 420px;
+  max-width: 320px;
   margin: 0;
   color: var(--text-muted);
+  font-size: 12px;
 }
 
 .file-picker {
@@ -263,8 +267,9 @@ button {
   border-radius: 999px;
   background: rgba(31, 122, 103, 0.1);
   color: var(--accent-strong);
-  padding: 12px 18px;
+  padding: 10px 15px;
   overflow: hidden;
+  font-size: 13px;
 }
 
 .file-picker input {
@@ -277,47 +282,49 @@ button {
 .receive-bar {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
-  border-radius: 22px;
-  padding: 16px 18px;
+  gap: 12px;
+  border-radius: 18px;
+  padding: 13px 14px;
   background: rgba(255, 255, 255, 0.74);
   border: 1px solid rgba(77, 57, 34, 0.08);
 }
 
 .label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
 
 .receive-bar strong {
   display: block;
-  max-width: 520px;
+  max-width: 500px;
   overflow-wrap: anywhere;
+  font-size: 13px;
 }
 
 .receive-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .composer {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 14px;
+  gap: 10px;
 }
 
 .composer textarea {
-  min-height: 116px;
-  border-radius: 22px;
+  min-height: 94px;
+  border-radius: 18px;
   border: 1px solid rgba(77, 57, 34, 0.08);
   background: rgba(255, 255, 255, 0.8);
-  padding: 18px 20px;
+  padding: 14px 16px;
   resize: vertical;
   color: #201912;
+  font-size: 14px;
 }
 
 .composer textarea:focus,
@@ -334,15 +341,15 @@ button {
 
 .device-list {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .device-card {
   display: flex;
   justify-content: space-between;
-  gap: 14px;
-  padding: 16px;
-  border-radius: 22px;
+  gap: 10px;
+  padding: 13px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(77, 57, 34, 0.08);
 }
@@ -354,37 +361,37 @@ button {
 
 .device-select {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: flex-start;
   width: 100%;
 }
 
 .device-select input {
-  margin-top: 4px;
-  width: 18px;
-  height: 18px;
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
   accent-color: var(--accent);
 }
 
 .device-copy {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .device-title-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .device-subline {
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .status-dot {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
 }
 
@@ -398,6 +405,7 @@ button {
   gap: 6px;
   color: var(--accent-strong);
   white-space: nowrap;
+  font-size: 12px;
 }
 
 .empty-state,
@@ -411,44 +419,59 @@ button {
 .timeline-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: 14px;
 }
 
 .timeline-column {
-  border-radius: 24px;
+  border-radius: 20px;
   background: rgba(255, 255, 255, 0.66);
   border: 1px solid rgba(77, 57, 34, 0.08);
-  padding: 18px;
+  padding: 14px;
 }
 
 .timeline-column h3 {
-  margin: 0 0 12px;
+  margin: 0 0 10px;
+  font-size: 16px;
 }
 
 .timeline-scroll {
   display: grid;
-  gap: 12px;
-  max-height: 320px;
+  gap: 10px;
+  max-height: 280px;
   overflow: auto;
   padding-right: 4px;
 }
 
 .timeline-item {
-  border-radius: 18px;
+  border-radius: 15px;
   background: rgba(249, 246, 241, 0.88);
   border: 1px solid rgba(77, 57, 34, 0.06);
-  padding: 14px;
+  padding: 11px 12px;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.timeline-item-clickable {
+  cursor: pointer;
+}
+
+.timeline-item-clickable:hover,
+.timeline-item-clickable:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(31, 122, 103, 0.26);
+  box-shadow: 0 12px 28px rgba(31, 122, 103, 0.09);
+  outline: none;
 }
 
 .timeline-item p {
-  margin: 8px 0;
+  margin: 6px 0;
+  font-size: 13px;
 }
 
 .timeline-item code {
   display: block;
-  margin-top: 8px;
+  margin-top: 6px;
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 11px;
   overflow-wrap: anywhere;
 }
 
@@ -456,17 +479,48 @@ button {
 .timeline-bottom {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 12px;
+}
+
+.timeline-topline-actions {
+  align-items: center;
+}
+
+.timeline-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.timeline-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(77, 57, 34, 0.08);
+  color: var(--text-muted);
+  transition: transform 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+
+.timeline-icon-button:hover,
+.timeline-icon-button:focus-visible {
+  background: rgba(31, 122, 103, 0.1);
+  color: var(--accent-strong);
+  transform: translateY(-1px);
+  outline: none;
 }
 
 .progress-rail {
-  height: 8px;
+  height: 6px;
   border-radius: 999px;
   background: rgba(31, 122, 103, 0.1);
   overflow: hidden;
-  margin: 10px 0 8px;
+  margin: 8px 0 6px;
 }
 
 .progress-fill {
@@ -486,8 +540,8 @@ button {
 
 .modal-card {
   width: min(420px, calc(100vw - 32px));
-  border-radius: 28px;
-  padding: 24px;
+  border-radius: 24px;
+  padding: 20px;
 }
 
 .modal-card h3 {
@@ -495,17 +549,18 @@ button {
 }
 
 .modal-copy {
-  margin: 0 0 16px;
+  margin: 0 0 14px;
   color: var(--text-muted);
+  font-size: 13px;
 }
 
 .code-input {
   width: 100%;
-  border-radius: 20px;
+  border-radius: 18px;
   border: 1px solid rgba(77, 57, 34, 0.1);
   background: rgba(255, 255, 255, 0.84);
-  padding: 16px 18px;
-  font-size: 24px;
+  padding: 14px 16px;
+  font-size: 20px;
   letter-spacing: 0.2em;
   text-align: center;
 }
@@ -514,17 +569,17 @@ button {
 .toast-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 16px;
+  gap: 8px;
+  margin-top: 14px;
 }
 
 .toast {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
-  max-width: 320px;
-  border-radius: 22px;
-  padding: 18px;
+  right: 18px;
+  bottom: 18px;
+  max-width: 290px;
+  border-radius: 18px;
+  padding: 14px;
   z-index: 30;
 }
 
@@ -539,6 +594,10 @@ button:disabled,
 }
 
 @media (max-width: 1180px) {
+  .app-shell {
+    padding: 16px;
+  }
+
   .grid-layout {
     grid-template-columns: 1fr;
   }
@@ -557,5 +616,11 @@ button:disabled,
 
   .receive-bar {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 860px) {
+  .app-shell {
+    padding: 14px;
   }
 }
