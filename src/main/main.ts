@@ -33,6 +33,7 @@ async function createWindow(): Promise<void> {
 function wireIpc(): void {
   ipcMain.handle("app:get-state", async () => coordinator?.getState());
   ipcMain.handle("app:choose-directory", async () => coordinator?.chooseReceiveDirectory());
+  ipcMain.handle("app:choose-files", async () => coordinator?.chooseFiles());
   ipcMain.handle("app:open-directory", async () => coordinator?.openReceiveDirectory());
   ipcMain.handle("app:request-pairing", async (_event, payload) =>
     coordinator?.requestPairing(payload.deviceId, payload.enteredCode)

@@ -1,10 +1,11 @@
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge, ipcRenderer, webUtils } from "electron";
 
 import type { AppState } from "../shared/types";
 
 const bridge = {
   getAppState: (): Promise<AppState> => ipcRenderer.invoke("app:get-state"),
   chooseReceiveDirectory: (): Promise<string> => ipcRenderer.invoke("app:choose-directory"),
+  chooseFiles: (): Promise<string[]> => ipcRenderer.invoke("app:choose-files"),
   openReceiveDirectory: (): Promise<void> => ipcRenderer.invoke("app:open-directory"),
   requestPairing: (deviceId: string, enteredCode: string): Promise<void> =>
     ipcRenderer.invoke("app:request-pairing", { deviceId, enteredCode }),
@@ -14,6 +15,10 @@ const bridge = {
     ipcRenderer.invoke("app:send-text", { text, targetDeviceIds }),
   sendFiles: (filePaths: string[], targetDeviceIds: string[]): Promise<void> =>
     ipcRenderer.invoke("app:send-files", { filePaths, targetDeviceIds }),
+  resolveFilePaths: (files: FileList | File[]): string[] =>
+    Array.from(files)
+      .map((file) => webUtils.getPathForFile(file))
+      .filter((candidate): candidate is string => Boolean(candidate)),
   onDevicesChanged: (callback: (devices: AppState["devices"]) => void): (() => void) => {
     const listener = (_event: Electron.IpcRendererEvent, state: AppState) => callback(state.devices);
     ipcRenderer.on("state:update", listener);

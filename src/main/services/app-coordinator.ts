@@ -165,6 +165,19 @@ export class AppCoordinator extends EventEmitter {
     return this.state.receiveDirectory;
   }
 
+  async chooseFiles(): Promise<string[]> {
+    const result = await dialog.showOpenDialog({
+      title: "选择要发送的文件",
+      properties: ["openFile", "multiSelections"]
+    });
+
+    if (result.canceled) {
+      return [];
+    }
+
+    return result.filePaths;
+  }
+
   async openReceiveDirectory(): Promise<void> {
     if (!this.state.receiveDirectory) {
       return;

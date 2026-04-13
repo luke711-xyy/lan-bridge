@@ -28,7 +28,16 @@ export class TransferService extends EventEmitter {
 
   async sendFiles(filePaths: string[], peers: PeerDevice[]): Promise<void> {
     const jobs = peers.flatMap((peer) => filePaths.map((filePath) => this.sendSingleFile(filePath, peer)));
-    await Promise.allSettled(jobs);
+    const results = await Promise.allSettled(jobs);
+    const failures = results.filter((result): result is PromiseRejectedResult => result.status === "rejected");
+
+    if (failures.length === results.length) {
+      throw new Error("所有文件发送都失败了，请检查接收端目录、网络连接和防火墙。");
+    }
+
+    if (failures.length > 0) {
+      throw new Error(`部分文件发送失败：${failures[0].reason instanceof Error ? failures[0].reason.message : "请查看传输状态面板"}`);
+    }
   }
 
   stop(): void {

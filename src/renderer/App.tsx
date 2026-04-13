@@ -91,6 +91,7 @@ export default function App() {
 
   async function handleSendFiles(paths: string[]) {
     if (paths.length === 0) {
+      setError("没有拿到可发送的本地文件路径，请改用“选择文件”按钮或检查拖拽来源。");
       return;
     }
     try {
@@ -365,9 +366,7 @@ function DropBoard({
   const [active, setActive] = useState(false);
 
   function extractPaths(files: FileList | File[]) {
-    return Array.from(files)
-      .map((file) => file.path)
-      .filter((candidate): candidate is string => Boolean(candidate));
+    return window.bridge.resolveFilePaths(files);
   }
 
   return (
@@ -393,18 +392,16 @@ function DropBoard({
       <ArrowUpFromLine size={22} />
       <strong>点击选择文件，或直接拖入这里</strong>
       <p>文件会发给右侧已勾选且已配对的设备，接收端自动保存到设定目录。</p>
-      <label className="file-picker">
+      <button
+        className="file-picker"
+        type="button"
+        onClick={async () => {
+          const paths = await window.bridge.chooseFiles();
+          void onFiles(paths);
+        }}
+      >
         选择文件
-        <input
-          multiple
-          type="file"
-          onChange={(event) => {
-            const paths = extractPaths(event.target.files ?? []);
-            void onFiles(paths);
-            event.currentTarget.value = "";
-          }}
-        />
-      </label>
+      </button>
     </div>
   );
 }
