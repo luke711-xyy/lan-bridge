@@ -51,6 +51,12 @@ macOS script behavior:
 - verifies `npx electron --version`
 - runs `npm run build`
 
+Note:
+
+- the macOS script is not a Python/Conda-style virtual environment
+- it is a project-local setup flow with local npm and Electron caches
+- if you want true Node version isolation, prefer `nvm`, `fnm`, or `volta`
+
 如果你的网络环境里 `electron` 安装脚本偶发失败，可以先执行：
 
 ```bash

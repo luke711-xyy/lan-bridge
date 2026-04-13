@@ -14,7 +14,7 @@
     "build:renderer": "vite build",
     "build:electron": "tsc -p tsconfig.node.json",
     "dist": "npm run build && electron-builder",
-    "clean": "powershell -NoProfile -Command \"if (Test-Path dist) { Remove-Item dist -Recurse -Force }; if (Test-Path dist-electron) { Remove-Item dist-electron -Recurse -Force }\""
+    "clean": "node ./scripts/clean.mjs"
   },
   "build": {
     "appId": "com.codex.lanbridge",
