@@ -15,7 +15,7 @@ npm install
 npm run dev
 ```
 
-### One-click setup with Conda
+### One-click setup
 
 Windows PowerShell:
 
@@ -31,7 +31,7 @@ cd ~/Projects/lan-bridge
 bash ./scripts/setup-lanbridge.sh
 ```
 
-The scripts will:
+Windows script behavior:
 
 - create a Conda environment named `LanBridge`
 - install `nodejs=20` from `conda-forge`
@@ -40,6 +40,16 @@ The scripts will:
 - run `npm install`
 - verify `npx electron --version`
 - run `npm run build`
+
+macOS script behavior:
+
+- does not use Conda
+- uses the current `node` and `npm` already available in your shell
+- configures the Electron mirror to `https://npmmirror.com/mirrors/electron/`
+- uses local `.electron-cache` and `.npm-cache`
+- runs `npm install`
+- verifies `npx electron --version`
+- runs `npm run build`
 
 如果你的网络环境里 `electron` 安装脚本偶发失败，可以先执行：
 
