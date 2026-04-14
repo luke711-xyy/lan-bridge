@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useMemo, useState } from "react";
+import { startTransition, useEffect, useMemo, useState, type DragEvent } from "react";
 
 import {
   Airplay,
@@ -412,7 +412,64 @@ function DropBoard({
   const [active, setActive] = useState(false);
 
   function extractPaths(files: FileList | File[]) {
-    return window.bridge.resolveFilePaths(files);
+    const directPaths = Array.from(files)
+      .map((file) => file.path?.trim())
+      .filter((candidate): candidate is string => Boolean(candidate));
+
+    if (directPaths.length > 0) {
+      return uniquePaths(directPaths);
+    }
+
+    return uniquePaths(window.bridge.resolveFilePaths(files));
+  }
+
+  function extractPathsFromDrop(event: DragEvent<HTMLDivElement>) {
+    const fromFiles = extractPaths(event.dataTransfer.files);
+
+    if (fromFiles.length > 0) {
+      return fromFiles;
+    }
+
+    const fromItems = Array.from(event.dataTransfer.items)
+      .filter((item) => item.kind === "file")
+      .map((item) => item.getAsFile())
+      .filter((file): file is File => Boolean(file))
+      .flatMap((file) => extractPaths([file]));
+
+    if (fromItems.length > 0) {
+      return uniquePaths(fromItems);
+    }
+
+    const textPayloads = Array.from(event.dataTransfer.types)
+      .map((type) => event.dataTransfer.getData(type))
+      .filter(Boolean);
+
+    const fromTextPayloads = uniquePaths(
+      textPayloads
+        .flatMap((payload) => payload.split(/\r?\n/))
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => {
+          const downloadUrlMatch = line.match(/^[^:]+:[^:]+:(.+)$/);
+          const candidate = downloadUrlMatch ? downloadUrlMatch[1] : line;
+          return normalizeDraggedPath(candidate);
+        })
+        .filter((candidate): candidate is string => Boolean(candidate))
+    );
+
+    if (fromTextPayloads.length > 0) {
+      return fromTextPayloads;
+    }
+
+    console.warn("Lan Bridge: failed to resolve dropped file paths", {
+      itemKinds: Array.from(event.dataTransfer.items).map((item) => ({
+        kind: item.kind,
+        type: item.type
+      })),
+      types: Array.from(event.dataTransfer.types)
+    });
+
+    return [];
   }
 
   return (
@@ -431,7 +488,7 @@ function DropBoard({
         if (disabled) {
           return;
         }
-        const paths = extractPaths(event.dataTransfer.files);
+        const paths = extractPathsFromDrop(event);
         void onFiles(paths);
       }}
     >
@@ -450,6 +507,43 @@ function DropBoard({
       </button>
     </div>
   );
+}
+
+function uniquePaths(paths: string[]): string[] {
+  return Array.from(new Set(paths));
+}
+
+function decodeDraggedFileUrl(value: string): string | null {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "file:") {
+      return null;
+    }
+
+    let nextPath = decodeURIComponent(url.pathname);
+    if (/^\/[A-Za-z]:/.test(nextPath)) {
+      nextPath = nextPath.slice(1);
+    }
+    return nextPath;
+  } catch {
+    return null;
+  }
+}
+
+function normalizeDraggedPath(value: string): string | null {
+  if (!value) {
+    return null;
+  }
+
+  if (value.startsWith("file://")) {
+    return decodeDraggedFileUrl(value);
+  }
+
+  if (/^[A-Za-z]:[\\/]/.test(value) || value.startsWith("\\\\") || value.startsWith("/")) {
+    return value;
+  }
+
+  return null;
 }
 
 function renderTransferLabel(status: AppState["transfers"][number]["status"]): string {
