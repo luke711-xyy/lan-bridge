@@ -465,6 +465,8 @@ button {
 .timeline-item p {
   margin: 6px 0;
   font-size: 13px;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .timeline-item code {
